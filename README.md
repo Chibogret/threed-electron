@@ -1,57 +1,89 @@
 # Hardware Supplies Pricebook
 
-Desktop pricebook application for hardware supplies built with Electron, React, and Vite. The app keeps a local catalogue of article pricing with quick summaries and is ready to package into a one-click installer for Windows or a signed app for macOS.
+A desktop application for managing hardware supplies pricebook items, built with Electron, React, and Vite.
 
-## Getting started
+## Features
 
-```bash
-npm install
-```
+*   **CRUD Table:** Add, edit, and delete pricebook items.
+*   **Search and Sort:** Easily find and organize items.
+*   **Shopping Cart:** Add items from the pricebook to a temporary cart to calculate a total sale price.
+*   **CSV Import/Export:** Import and export pricebook data using CSV files.
+*   **Persistence:** Data is persisted using `localStorage` (default) or an optional JSON file adapter for Electron.
+*   **Keyboard Shortcuts:**
+    *   `Ctrl/Cmd+N`: New Item
+    *   `Ctrl/Cmd+F`: Focus Search
+    *   `Ctrl/Cmd+I`: Import CSV
+    *   `Ctrl/Cmd+E`: Export CSV
+*   **Desktop Polish:** Persists window size and position, includes an app menu, and an About dialog.
 
-### Development
+## Installation
 
-Run Vite, watch the Electron processes, and launch the desktop app:
+1.  **Clone the repository:**
+    ```bash
+    git clone [repository-url]
+    cd hardware-supplies-pricebook
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+## Running the Application
+
+### Development Mode
+
+To run the application in development mode with hot-reloading:
 
 ```bash
 npm run dev
 ```
 
-### Type checking
+This will start the Vite development server and then launch the Electron app.
 
-```bash
-npm run build:types
-```
+### Production Build
 
-### Production build
-
-Generate production assets for the renderer and the Electron processes:
+To create a production build for your operating system:
 
 ```bash
 npm run build
 ```
 
-### Package installers
+This will first build the React frontend with Vite, then package the Electron application using `electron-builder`. The output will be in the `dist_electron` directory.
 
-Create production builds and package installers using `electron-builder`.
+### Starting the Built Application
+
+After building, you can start the Electron application directly:
 
 ```bash
-npm run dist
+npm start
 ```
 
-Artifacts are generated for:
+## Project Structure
 
-- **Windows (x64)** – NSIS one-click installer configured for a frictionless setup experience.
-- **macOS** – `.dmg` disk image.
+*   `electron/`: Contains the main and preload scripts for Electron.
+*   `src/`: React source code for the user interface.
+    *   `App.jsx`: Main React component with all UI and logic.
+    *   `main.jsx`: React entry point.
+    *   `styles.css`: Application styling.
+*   `public/`: Static assets.
+*   `build/`: Build resources (e.g., icons).
+*   `dist/`: Output of the Vite build (frontend).
+*   `dist_electron/`: Output of the Electron-builder build (desktop app).
 
-Generated files are located inside the `dist/` and `dist-electron/` directories, and installers are produced in the `dist/` folder.
+## CSV Format
 
-> **Tip:** Provide custom installer icons by dropping `icon.ico` (Windows) or `icon.icns` (macOS) files into the `build/` directory before running `npm run dist`. If none are supplied, the default Electron icons will be used.
+When importing or exporting CSV files, please use the following exact header format:
 
-## Tech stack
+`"Article Name,Unit,Unit Price,Sale Price"`
 
-- Electron 26
-- React 18 + Vite 5
-- TypeScript 5
-- electron-builder for packaging installers
+Example:
 
-All data is stored in `localStorage`, so pricing stays on the device and no network connection is required.
+```csv
+Article Name,Unit,Unit Price,Sale Price
+Hammer,pcs,150.00,200.00
+Nails,box,50.00,75.00
+```
+
+## License
+
+[MIT License or other appropriate license]

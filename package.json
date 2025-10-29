@@ -1,80 +1,46 @@
 {
   "name": "hardware-supplies-pricebook",
-  "version": "0.1.0",
-  "description": "Desktop pricebook for hardware supplies built with Electron, React, and Vite.",
-  "main": "dist-electron/main.js",
-  "author": "",
-  "license": "MIT",
+  "private": true,
+  "version": "1.0.0",
+  "main": "electron/main.js",
   "scripts": {
-    "clean": "rimraf dist dist-electron",
-    "dev": "npm run clean && concurrently -k \"npm:dev:renderer\" \"npm:dev:main\" \"npm:dev:preload\" \"npm:dev:electron\"",
-    "dev:renderer": "vite",
-    "dev:main": "tsup electron/main.ts --format cjs --splitting false --sourcemap --out-dir dist-electron --target node18 --watch",
-    "dev:preload": "tsup electron/preload.ts --format cjs --splitting false --sourcemap --out-dir dist-electron --target node18 --watch",
-    "dev:electron": "wait-on dist-electron/main.js dist-electron/preload.js tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
-    "build": "npm run clean && npm run build:types && npm run build:main && npm run build:preload && vite build",
-    "build:main": "tsup electron/main.ts --format cjs --splitting false --sourcemap --out-dir dist-electron --target node18",
-    "build:preload": "tsup electron/preload.ts --format cjs --splitting false --sourcemap --out-dir dist-electron --target node18",
-    "build:types": "tsc -p tsconfig.json --noEmit",
-    "start": "electron .",
-    "lint": "eslint --ext .ts,.tsx src electron",
-    "preview": "vite preview",
-    "dist": "npm run build && electron-builder"
+    "dev:vite": "vite --port 3000",
+    "dev:electron": "cross-env NODE_ENV=development wait-on tcp:3000 && electron .",
+    "dev": "npm run dev:vite & npm run dev:electron",
+    "build:web": "vite build",
+    "build": "vite build && electron-builder",
+    "start": "electron ."
   },
   "dependencies": {
-    "electron": "26.6.9",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@types/node": "20.11.17",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@typescript-eslint/parser": "6.21.0",
-    "@vitejs/plugin-react": "4.2.1",
-    "concurrently": "8.2.1",
-    "cross-env": "7.0.3",
-    "electron-builder": "24.6.4",
-    "eslint": "8.56.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-react": "7.33.2",
-    "rimraf": "5.0.5",
-    "tslib": "2.6.2",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
-    "vite": "5.0.12",
-    "wait-on": "7.0.1"
+    "@vitejs/plugin-react": "^4.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "vite": "^5.0.8",
+    "wait-on": "^7.2.0"
   },
   "build": {
-    "appId": "com.example.hardwarepricebook",
+    "appId": "com.yourcompany.hardwaresuppliespricebook",
     "productName": "Hardware Supplies Pricebook",
     "files": [
-      "dist/",
-      "dist-electron/",
-      "package.json"
+      "dist/**/*",
+      "electron/**/*"
     ],
     "directories": {
       "buildResources": "build"
     },
-    "mac": {
-      "category": "public.app-category.productivity",
-      "artifactName": "Hardware-Supplies-Pricebook-${version}-mac.${ext}"
-    },
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": ["x64"]
-        }
-      ],
-      "artifactName": "Hardware-Supplies-Pricebook-${version}-win.${ext}"
+      "target": "nsis",
+      "icon": "build/icon.ico"
     },
-    "nsis": {
-      "oneClick": true,
-      "perMachine": false,
-      "allowToChangeInstallationDirectory": false
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
     }
   }
 }
-
