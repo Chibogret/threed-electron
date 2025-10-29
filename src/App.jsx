@@ -195,7 +195,7 @@ function App() {
     const csvRows = [
       headers.join(','),
       ...items.map(item =>
-        [item.quantity, item.articleName, item.unitPrice, item.salePrice].join(',')
+        [item.unit, item.articleName, item.unitPrice, item.salePrice].join(',')
       )
     ];
     const csvData = csvRows.join('\n');
