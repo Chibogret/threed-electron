@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 
+const isDev = !app.isPackaged;
+
 let mainWindow;
 let db;
 
@@ -80,7 +82,12 @@ function createWindow() {
 
   mainWindow.on('close', saveWindowState);
 
-  mainWindow.loadURL('http://localhost:3000');
+  if (isDev) {
+    mainWindow.loadURL('http://localhost:3000');
+  } else {
+    const indexPath = path.join(__dirname, '..', 'dist', 'index.html');
+    mainWindow.loadFile(indexPath);
+  }
 
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
     console.error(`Failed to load URL: ${validatedURL} with error: ${errorDescription} (Code: ${errorCode})`);
