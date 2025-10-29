@@ -1,7 +1,23 @@
 import { app, BrowserWindow, nativeTheme } from 'electron';
+import { mkdirSync } from 'fs';
 import path from 'path';
 
 const isDev = !!process.env.VITE_DEV_SERVER_URL;
+
+const ensureWritableUserDataPath = () => {
+  if (process.platform !== 'win32') {
+    return;
+  }
+
+  const safeUserDataPath = path.join(app.getPath('temp'), app.getName());
+
+  try {
+    mkdirSync(safeUserDataPath, { recursive: true });
+    app.setPath('userData', safeUserDataPath);
+  } catch (error) {
+    console.warn('Failed to configure writable userData path', error);
+  }
+};
 
 const createWindow = async () => {
   const window = new BrowserWindow({
@@ -39,5 +55,6 @@ app.on('activate', () => {
 });
 
 app.whenReady().then(() => {
+  ensureWritableUserDataPath();
   void createWindow();
 });
